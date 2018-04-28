@@ -1,28 +1,24 @@
-FROM fstehle/rpi-node:4
-
-ENV DEBIAN_FRONTEND noninteractive
-ENV HOME /root
-
-RUN [ "cross-build-start" ]
+FROM arm32v7/node:4
 
 ADD supervisord.conf /build/
 ADD dbus.sh /build/
 
 RUN /usr/sbin/usermod -u 99 nobody && \
-    /usr/sbin/usermod -g 100 nobody && \
-    apt-get -q update && apt-get install -qy \
+    /usr/sbin/usermod -g 100 nobody
+    
+RUN apt-get update && apt-get install -y \
     supervisor \
     build-essential \
     libavahi-compat-libdnssd-dev \
-    libasound2-dev \
-    git && \
-    mkdir -p /var/log/supervisor
+    libasound2-dev
+
+RUN mkdir -p /var/log/supervisor
 
 RUN export USER=root && npm install -g --unsafe-perm babel@5
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN git clone https://github.com/stephen/airsonos && cd airsonos && git reset --hard 50d70ce && export USER=root && npm install -g --unsafe-perm
+RUN git clone https://github.com/lsmith77/airsonos && cd airsonos && export USER=root && npm install -g --unsafe-perm
 
 RUN chmod +x /build/dbus.sh
 
