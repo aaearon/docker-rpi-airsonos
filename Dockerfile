@@ -18,7 +18,7 @@ RUN export USER=root && npm install -g --unsafe-perm babel@5
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-RUN git clone https://github.com/lsmith77/airsonos && cd airsonos && export USER=root && npm install -g --unsafe-perm
+RUN git clone https://github.com/aaearon/airsonos && cd airsonos && export USER=root && npm install -g --unsafe-perm
 
 RUN chmod +x /build/dbus.sh
 
